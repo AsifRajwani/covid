@@ -8,10 +8,6 @@ DB_USER_ID
 DB_PASSWORD
 DB_ACCOUNT
 
-<<<<<<< HEAD
-To test the snowfalke connection run the following
-`node testSnowflake.js`x
-=======
 1. Start webserver:
 Use the command `npm start` to start the web app server.
 Open localhost:300 in browser
@@ -19,4 +15,3 @@ Open localhost:300 in browser
 2. Test database
 To test the snowfalke database interaction run the following
 `node testSnowflake.js`
->>>>>>> 7e247a5b00b9c6d9f4ba5f615d1b962e4093c804
