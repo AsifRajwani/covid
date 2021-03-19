@@ -2,18 +2,16 @@
 var snowflake = require('snowflake-sdk');
 var connectionId = null;
 
+
 var connection = snowflake.createConnection({
-    account: "slalom",
-    username: "WLN_G1",
-    password: "Welcome1234",
-    warehouse: "NEW_YORK_CITY_ANALYZE_W",
-    database: "WLN_CASE_COM",
-    schema: "GROUP1"
+    account: process.env.DB_ACCOUNT,
+    username: process.env.DB_USER_ID,
+    password: process.env.DB_PASSWORD,
+    //warehouse: "NEW_YORK_CITY_ANALYZE_W",
+    //database: "WLN_CASE_COMP",
+    //schema: "GROUP1"
 }
 );
-
-
-
 
 
 
@@ -53,6 +51,22 @@ function getEmployee(employeeId) {
 }
 
 
+function addQuestionnairre(questionnairre) {
+    console.log("adding questionnairre: " + JSON.stringify(questionnairre, null, 4));
+    connection.execute({
+    //sqlText: 'select * from WLN_CASE_COMP.GROUP1.VW_EMPLOYEE_RETURN_RESULTS;',
+    sqlText: 'insert into WLN_CASE_COMP.GROUP1.STG_EMPLOYEE_QUESTIONNAIRE (EMPLOYEE_ID, RESULT_DATE, QUES_RESULTS, VACCINATED, COVID_CONTACT, TRAVEL_INTERNATIONAL, FEVER, COUGH, SORE_THROAT, CHILLS, MUSCLE_ACHES, HEADACHE, TASTE_SMELL_LOSS, ABDOMINAL_PAIN) VALUES (?, CURRENT_DATE(),?,?,?,?,?,?,?,?,?,?,?,?)',
+    binds: [questionnairre.employeeId, questionnairre.quesResults, questionnairre.vaccinated, questionnairre.covidContact, questionnairre.travelInternational, questionnairre.fever, questionnairre.cough,questionnairre.soreThroat, questionnairre.chills, questionnairre.muscleAches, questionnairre.headache, questionnairre.tasteSmellLoss, questionnairre.abdominalPain],
+    complete: function(err, stmt, rows) {
+        if (err) {
+          console.error('Failed to execute statement due to the following error: ' + err.message);
+        } else {
+          console.log('Successfully executed statement: ' + stmt.getSqlText());
+        }
+      }
+    });
+}
+
 function initialize() {
     testConnection();
 }
@@ -61,5 +75,6 @@ function initialize() {
 //initialize();
 
 module.exports ={
-    initialize, getEmployee
+    initialize, getEmployee,  addQuestionnairre
+
 }
