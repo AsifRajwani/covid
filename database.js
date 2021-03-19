@@ -5,9 +5,13 @@ var connectionId = null;
 var connection = snowflake.createConnection({
     account: "slalom",
     username: "WLN_G1",
-    password: "Welcome1234"
+    password: "Welcome1234",
+    warehouse: "NEW_YORK_CITY_ANALYZE_W",
+    database: "WLN_CASE_COM",
+    schema: "GROUP1"
 }
 );
+
 
 
 
