@@ -11,4 +11,4 @@ DB_PASSWORD
 DB_ACCOUNT
 
 To test the snowfalke connection run the following
-`node testSnowflake.js`
+`node testSnowflake.js`x
