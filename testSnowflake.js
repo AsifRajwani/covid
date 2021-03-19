@@ -1,7 +1,7 @@
 
 var database = require('./database.js');
 database.initialize();
-//database.getEmployee(1);
+database.getEmployee(1);
 
 var questionnairre = {};
 questionnairre.employeeId = 72

@@ -5,11 +5,10 @@ Use the command `npm start` to start the web app server.
 Open localhost:300 in browser
 
 
-Set the following environment variables
+Set the following environment variables:
 DB_USER_ID
 DB_PASSWORD
 DB_ACCOUNT
 
 To test the snowfalke connection run the following
-
-node testSnowflake.js`
+`node testSnowflake.js`
