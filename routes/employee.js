@@ -2,20 +2,21 @@ var express = require('express');
 var router = express.Router();
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
+router.get('/', function (req, res, next) {
   let employee = {
-    empoyeeId: 72,
+    employeeId: 72,
     firstName: "Ruhee",
     lastName: "Rajwani"
   }
- 
+
 
   let employeeId = req.query.employeeId;
+  employee["employeeId"] = employeeId;
   let message = "Eligible " + employeeId;
   if (employeeId % 2 == 0)
-    res.render('message', {"employee": employee, "message": message});
-  else  
-    res.render('questionnairre', {"employee": employee});
+    res.render('message', { "employee": employee, "message": message });
+  else
+    res.render('questionnairre', { "employee": employee });
 });
 
 module.exports = router;
