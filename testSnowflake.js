@@ -18,4 +18,5 @@ questionnairre.HEADACHE ="TRUE";
 questionnairre.TASTE_SMELL_LOSS  ="TRUE"; 
 questionnairre.ABDOMINAL_PAIN ="TRUE"; 
 
-database.addQuestionnairre(questionnairre)
+database.addQuestionnairre(questionnairre);
+database.deleteTodayQuestionnairre(questionnairre.EMPLOYEE_ID);

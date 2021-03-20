@@ -84,6 +84,27 @@ function addQuestionnairre(questionnairre) {
   });
 }
 
+function deleteTodayQuestionnairre(employeeId) {
+  console.log("deleting today's questionnairre for employeeId: " + employeeId);
+  return new Promise((resolve, reject) => {
+    connection.execute({
+      //sqlText: 'select * from WLN_CASE_COMP.GROUP1.VW_EMPLOYEE_RETURN_RESULTS;',
+      sqlText: 'delete from WLN_CASE_COMP.GROUP1.STG_EMPLOYEE_QUESTIONNAIRE where EMPLOYEE_ID = ? and RESULT_DATE = CURRENT_DATE()',
+      binds: [employeeId],
+      complete: function (err, stmt, rows) {
+        if (err) {
+          let errorMsg = 'Failed to execute statement due to the following error: ' + err.message;
+          console.error(errorMsg);
+          reject(errorMsg);
+        } else {
+          console.log('Successfully executed statement: ' + stmt.getSqlText());
+          resolve(null);
+        }
+      }
+    });
+  });
+}
+
 function initialize() {
   connect();
 }
@@ -92,6 +113,6 @@ function initialize() {
 //initialize();
 
 module.exports = {
-  initialize, getEmployee, addQuestionnairre
+  initialize, getEmployee, addQuestionnairre, deleteTodayQuestionnairre
 
 }
