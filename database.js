@@ -16,7 +16,7 @@ var connection = snowflake.createConnection({
 
 
 function connect() {
-  console.log("Initiating the connection. account: " + process.env.DB_ACCOUNT + ", username: " + process.env.DB_USER_ID + ", warehosue:" + process.env.DB_PASSWORD)
+  console.log("Initiating the connection. account: " + process.env.DB_ACCOUNT + ", username: " + process.env.DB_USER_ID)
   connection.connect(
     function (err, conn) {
       if (err) {
@@ -67,7 +67,9 @@ function addQuestionnairre(questionnairre) {
     connection.execute({
       //sqlText: 'select * from WLN_CASE_COMP.GROUP1.VW_EMPLOYEE_RETURN_RESULTS;',
       sqlText: 'insert into WLN_CASE_COMP.GROUP1.STG_EMPLOYEE_QUESTIONNAIRE (EMPLOYEE_ID, RESULT_DATE, QUES_RESULTS, VACCINATED, COVID_CONTACT, TRAVEL_INTERNATIONAL, FEVER, COUGH, SORE_THROAT, CHILLS, MUSCLE_ACHES, HEADACHE, TASTE_SMELL_LOSS, ABDOMINAL_PAIN) VALUES (?, CURRENT_DATE(),?,?,?,?,?,?,?,?,?,?,?,?)',
-      binds: [questionnairre.employeeId, questionnairre.quesResults, questionnairre.vaccinated, questionnairre.covidContact, questionnairre.travelInternational, questionnairre.fever, questionnairre.cough, questionnairre.soreThroat, questionnairre.chills, questionnairre.muscleAches, questionnairre.headache, questionnairre.tasteSmellLoss, questionnairre.abdominalPain],
+      binds: [questionnairre.EMPLOYEE_ID, questionnairre.QUES_RESULTS, questionnairre.VACCINATED, questionnairre.COVID_CONTACT, questionnairre.TRAVEL_INTERNATIONAL, 
+        questionnairre.FEVER, questionnairre.COUGH, questionnairre.SORE_THROAT, questionnairre.CHILLS, questionnairre.MUSCLE_ACHES, questionnairre.HEADACHE, 
+        questionnairre.TASTE_SMELL_LOSS, questionnairre.ABDOMINAL_PAIN],
       complete: function (err, stmt, rows) {
         if (err) {
           let errorMsg = 'Failed to execute statement due to the following error: ' + err.message;

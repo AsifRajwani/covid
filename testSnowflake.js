@@ -4,18 +4,18 @@ database.initialize();
 database.getEmployee(1);
 
 var questionnairre = {};
-questionnairre.employeeId = 72
-questionnairre.quesResults = "Fail" 
-questionnairre.vaccinated = "TRUE";
-questionnairre.covidContact = "FALSE";
-questionnairre.travelInternational ="TRUE"; 
-questionnairre.fever = "TRUE"; 
-questionnairre.cough = "TRUE"; 
-questionnairre.soreThroat = "TRUE"; 
-questionnairre.chills = "TRUE"; 
-questionnairre.muscleAches = "TRUE";  
-questionnairre.headache ="TRUE";  
-questionnairre.tasteSmellLoss  ="TRUE"; 
-questionnairre.abdominalPain ="TRUE"; 
+questionnairre.EMPLOYEE_ID = 72
+questionnairre.QUES_RESULTS = "Fail" 
+questionnairre.VACCINATED = "TRUE";
+questionnairre.COVID_CONTACT = "FALSE";
+questionnairre.TRAVEL_INTERNATIONAL ="TRUE"; 
+questionnairre.FEVER = "TRUE"; 
+questionnairre.COUGH = "TRUE"; 
+questionnairre.SORE_THROAT = "TRUE"; 
+questionnairre.CHILLS = "TRUE"; 
+questionnairre.MUSCLE_ACHES = "TRUE";  
+questionnairre.HEADACHE ="TRUE";  
+questionnairre.TASTE_SMELL_LOSS  ="TRUE"; 
+questionnairre.ABDOMINAL_PAIN ="TRUE"; 
 
 database.addQuestionnairre(questionnairre)
