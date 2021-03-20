@@ -17,6 +17,8 @@ router.post('/', function (req, res, next) {
   }
 
   try {
+    database.deleteTodayQuestionnairre(qObject.EMPLOYEE_ID)
+    .then (result => {
     database.addQuestionnairre(qObject)
       .then(result => {
         if (qObject.QUES_RESULTS == "Fail")
@@ -31,6 +33,7 @@ router.post('/', function (req, res, next) {
         res.render('message', { "message": "System error processing your request, please try again later.", "hasError": true });
         return;
       })
+    })
   } catch (error) {
     console.log(error);
   }
