@@ -4,77 +4,92 @@ var connectionId = null;
 
 
 var connection = snowflake.createConnection({
-    account: process.env.DB_ACCOUNT,
-    username: process.env.DB_USER_ID,
-    password: process.env.DB_PASSWORD,
-    warehouse: "NEW_YORK_CITY_ANALYZE_WH"
-    //database: "WLN_CASE_COMP",
-    //schema: "GROUP1"
+  account: process.env.DB_ACCOUNT,
+  username: process.env.DB_USER_ID,
+  password: process.env.DB_PASSWORD,
+  warehouse: "NEW_YORK_CITY_ANALYZE_WH"
+  //database: "WLN_CASE_COMP",
+  //schema: "GROUP1"
 }
 );
 
 
 
-function testConnection() {
-    console.log("Initiating the connection. account: " + process.env.DB_ACCOUNT + ", username: " + process.env.DB_USER_ID + ", warehosue:" + process.env.DB_PASSWORD)
-    connection.connect(
-        function (err, conn) {
-            if (err) {
-                console.error('Unable to connect: ' + err.message);
-            }
-            else {
-                console.log('Successfully connected to Snowflake.');
-                // Optional: store the connection ID.
-                connectionId = conn.getId();
-            }
-        }
-    );
+function connect() {
+  console.log("Initiating the connection. account: " + process.env.DB_ACCOUNT + ", username: " + process.env.DB_USER_ID + ", warehosue:" + process.env.DB_PASSWORD)
+  connection.connect(
+    function (err, conn) {
+      if (err) {
+        console.error('Unable to connect: ' + err.message);
+        process.exit(1)
+      }
+      else {
+        console.log('Successfully connected to Snowflake.');
+        // Optional: store the connection ID.
+        connectionId = conn.getId();
+      }
+    }
+  );
 }
 
 function getEmployee(employeeId) {
-    console.log("Quering for employee id: " + employeeId);
+  console.log("Quering for employee id: " + employeeId);
+  return new Promise((resolve, reject) => {
     connection.execute({
-    //sqlText: 'select * from WLN_CASE_COMP.GROUP1.VW_EMPLOYEE_RETURN_RESULTS;',
-    sqlText: 'select * from WLN_CASE_COMP.GROUP1.VW_EMPLOYEE_RETURN_RESULTS where EMPLOYEE_ID = ?;',
-    binds: [employeeId],
-    complete: function(err, stmt, rows) {
+      //sqlText: 'select * from WLN_CASE_COMP.GROUP1.VW_EMPLOYEE_RETURN_RESULTS;',
+      sqlText: 'select * from WLN_CASE_COMP.GROUP1.VW_EMPLOYEE_RETURN_RESULTS where EMPLOYEE_ID = ?;',
+      binds: [employeeId],
+      complete: function (err, stmt, rows) {
         if (err) {
-          console.error('Failed to execute statement due to the following error: ' + err.message);
+          let errorMsg = 'Failed to execute statement due to the following error: ' + err.message;
+          console.error(errorMsg);
+          reject(errorMsg);
         } else {
           console.log('Successfully executed statement: ' + stmt.getSqlText());
           console.log("Number or rows retrieved: " + rows.length)
-          if (rows.length > 0)
+          if (rows.length > 0) {
             console.log('Data Retrieved' + JSON.stringify(rows[0], null, 4));
+            resolve(rows[0]);
+          }
+          else {
+            resolve(null);
+          }
         }
       }
     });
+  });
 }
 
 
 function addQuestionnairre(questionnairre) {
-    console.log("adding questionnairre: " + JSON.stringify(questionnairre, null, 4));
+  console.log("adding questionnairre: " + JSON.stringify(questionnairre, null, 4));
+  return new Promise((resolve, reject) => {
     connection.execute({
-    //sqlText: 'select * from WLN_CASE_COMP.GROUP1.VW_EMPLOYEE_RETURN_RESULTS;',
-    sqlText: 'insert into WLN_CASE_COMP.GROUP1.STG_EMPLOYEE_QUESTIONNAIRE (EMPLOYEE_ID, RESULT_DATE, QUES_RESULTS, VACCINATED, COVID_CONTACT, TRAVEL_INTERNATIONAL, FEVER, COUGH, SORE_THROAT, CHILLS, MUSCLE_ACHES, HEADACHE, TASTE_SMELL_LOSS, ABDOMINAL_PAIN) VALUES (?, CURRENT_DATE(),?,?,?,?,?,?,?,?,?,?,?,?)',
-    binds: [questionnairre.employeeId, questionnairre.quesResults, questionnairre.vaccinated, questionnairre.covidContact, questionnairre.travelInternational, questionnairre.fever, questionnairre.cough,questionnairre.soreThroat, questionnairre.chills, questionnairre.muscleAches, questionnairre.headache, questionnairre.tasteSmellLoss, questionnairre.abdominalPain],
-    complete: function(err, stmt, rows) {
+      //sqlText: 'select * from WLN_CASE_COMP.GROUP1.VW_EMPLOYEE_RETURN_RESULTS;',
+      sqlText: 'insert into WLN_CASE_COMP.GROUP1.STG_EMPLOYEE_QUESTIONNAIRE (EMPLOYEE_ID, RESULT_DATE, QUES_RESULTS, VACCINATED, COVID_CONTACT, TRAVEL_INTERNATIONAL, FEVER, COUGH, SORE_THROAT, CHILLS, MUSCLE_ACHES, HEADACHE, TASTE_SMELL_LOSS, ABDOMINAL_PAIN) VALUES (?, CURRENT_DATE(),?,?,?,?,?,?,?,?,?,?,?,?)',
+      binds: [questionnairre.employeeId, questionnairre.quesResults, questionnairre.vaccinated, questionnairre.covidContact, questionnairre.travelInternational, questionnairre.fever, questionnairre.cough, questionnairre.soreThroat, questionnairre.chills, questionnairre.muscleAches, questionnairre.headache, questionnairre.tasteSmellLoss, questionnairre.abdominalPain],
+      complete: function (err, stmt, rows) {
         if (err) {
-          console.error('Failed to execute statement due to the following error: ' + err.message);
+          let errorMsg = 'Failed to execute statement due to the following error: ' + err.message;
+          console.error(errorMsg);
+          reject(errorMsg);
         } else {
           console.log('Successfully executed statement: ' + stmt.getSqlText());
+          resolve(null);
         }
       }
     });
+  });
 }
 
 function initialize() {
-    testConnection();
+  connect();
 }
 
 
 //initialize();
 
-module.exports ={
-    initialize, getEmployee,  addQuestionnairre
+module.exports = {
+  initialize, getEmployee, addQuestionnairre
 
 }

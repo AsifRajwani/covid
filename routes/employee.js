@@ -1,23 +1,41 @@
 var express = require('express');
+var database = require('../database.js');
 var router = express.Router();
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
-  let employee = {
-    employeeId: 72,
-    firstName: "Ruhee",
-    lastName: "Rajwani"
-  }
-
 
   let employeeId = req.query.employeeId;
-  employee["employeeId"] = employeeId;
-  let message = "Eligible " + employeeId;
-  if (employeeId % 2 == 0)
-    res.render('message', { "employee": employee, "message": message });
-  else
-    res.render('questionnairre', { "employee": employee });
+  let employee = null;
+
+  try {
+    database.getEmployee(employeeId)
+      .then(emp => {
+        if (emp == null) {
+          res.render('message', { "message": "NO Employee found for Id: " + employeeId + ". Please try the search again." });
+          return;
+        }
+        employee = emp;
+        let returnStatus = employee.EMPLOYEE_RETURN_STATUS_CD;
+        if (returnStatus && (returnStatus == "RQ" || returnStatus == "RAQ")) {
+          res.render('questionnairre', { "employee": employee });
+          return;
+        } else {
+          res.render('message', { "message": "Current Status: " + employee.EMPLOYEE_RETURN_STATUS, "hasError": false });
+          return;
+        }
+      })
+      .catch(error => {
+        res.render('message', { "message": "System error processing your request, please try again later.", "hasError": true });
+        return;
+      })
+  } catch (error) {
+    console.log(error);
+  }
+
 });
+
+
 
 module.exports = router;
 
